@@ -17,7 +17,7 @@ jobs:
         run: |
           export DEBIAN_FRONTEND=noninteractive
           apt update
-          apt install -y git python3
+          apt install -y git python3 python3-requests
 #      - name: work around permission issue with git vulnerability (we are local here). TO REMOVE
 #        run: git config --global --add safe.directory /__w/WSL/WSL
       - uses: actions/checkout@v3
@@ -25,8 +25,6 @@ jobs:
         id: update-seeds
         shell: bash
         run: |
-          ls
-          pwd
           echo "::set-output name=has-changes::false"
           python3 ./scripts/sync-snap-seeds -m . noble && echo "::set-output name=has-changes::true"
       - name: Add any changes to git
