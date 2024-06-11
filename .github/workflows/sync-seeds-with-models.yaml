@@ -24,6 +24,8 @@ jobs:
       - name: Update the seeds, if needed
         id: update-seeds
         run: |
+          ls
+          pwd
           echo "::set-output name=has-changes::false"
           ./scripts/sync-snap-seeds -m . noble && echo "::set-output name=has-changes::true"
       - name: Add any changes to git
