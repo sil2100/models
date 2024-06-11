@@ -1,0 +1,42 @@
+name: Sync Ubuntu seeds with classic model assertions
+on:
+  schedule:
+    - cron: '0 * * * *'
+
+jobs:
+  sync-seeds-with-models:
+    name: Sync Ubuntu seeds with classic model assertions
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:rolling
+    outputs:
+      has-changes: ${{ steps.update-seeds.outputs.has-changes }}
+    steps:
+      - name: Install git and dependencies
+        run: |
+          export DEBIAN_FRONTEND=noninteractive
+          apt update
+          apt install -y git
+#      - name: work around permission issue with git vulnerability (we are local here). TO REMOVE
+#        run: git config --global --add safe.directory /__w/WSL/WSL
+      - uses: actions/checkout@v3
+      - name: Update the seeds, if needed
+        id: update-seeds
+        run: |
+          echo "::set-output name=has-changes::false"
+          ./scripts/sync-snap-seeds -m . noble && echo "::set-output name=has-changes::true"
+      - name: Add any changes to git
+        if: ${{ steps.update-seeds.outputs.has-changes == 'true' }}
+        run: |
+          git add .
+      - name: Create Pull Request
+        if: ${{ steps.update-seeds.outputs.has-changes == 'true' }}
+        uses: peter-evans/create-pull-request@v3
+        with:
+          commit-message: Update model assertion snaps per seed changes
+          title: Update model assertion snaps per seed changes
+          labels: automated pr
+          body: "Auto-generated pull request by GitHub Action"
+          branch: update-seeds
+          token: ${{ secrets.GITHUB_TOKEN }}
+          delete-branch: true
