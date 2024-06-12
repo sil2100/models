@@ -18,7 +18,7 @@ jobs:
         run: |
           export DEBIAN_FRONTEND=noninteractive
           apt update
-          apt install -y git python3 python3-requests distro-info gh
+          apt install -y git python3 python3-requests distro-info gh jq
       - name: work around permission issue with git vulnerability (we are local here). TO REMOVE
         run: git config --global --add safe.directory /__w/models/models
       - uses: actions/checkout@v3
@@ -26,11 +26,11 @@ jobs:
         id: check-pr-exists
         env:
           GH_TOKEN: ${{ github.token }}
+        shell: bash
         run: |
-          prs=$(gh pr list -H update-seeds)
-          echo "Size of PRS ARRAY: ${#prs[@]}"
-          echo "Length of PRS[0] string: ${#prs[0]}"
-          if ((${#prs[@]} > 0 && ${#prs[0]} != 0 )); then
+          count=$(gh pr list -H update-seeds --json id | jq length)
+          echo "$count"
+          if [ "$count" != "0" ]; then
             echo "has-pr=true" >> "$GITHUB_OUTPUT"
           fi
       - name: Pull the existing changes from the existing PR
