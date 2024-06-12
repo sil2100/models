@@ -36,7 +36,7 @@ jobs:
       - name: Pull the existing changes from the existing PR
         if: ${{ steps.check-pr-exists.outputs.has-pr == 'true' }}
         run: |
-          git pull update-seeds
+          git pull origin update-seeds
       - name: Update the seeds, if needed
         id: update-seeds
         shell: bash
