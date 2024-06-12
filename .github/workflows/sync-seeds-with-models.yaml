@@ -22,6 +22,7 @@ jobs:
       - name: work around permission issue with git vulnerability (we are local here). TO REMOVE
         run: git config --global --add safe.directory /__w/models/models
       - uses: actions/checkout@v3
+        fetch-depth: 0
       - name: Check if a PR already exists
         id: check-pr-exists
         env:
