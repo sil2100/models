@@ -55,12 +55,6 @@
             "id": "lATO8HzwVvrAPrlZRAWpfyrJKlAJrZS3"
         },
         {
-            "name": "gtk-common-themes",
-            "type": "app",
-            "default-channel": "latest/stable/ubuntu-24.04",
-            "id": "jZLfBRzf1cYlYysIjD2bwSzNtngY0qit"
-        },
-        {
             "name": "snapd-desktop-integration",
             "type": "app",
             "default-channel": "latest/stable/ubuntu-24.04",
