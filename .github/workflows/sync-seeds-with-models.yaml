@@ -38,7 +38,8 @@ jobs:
       - name: Pull the existing changes from the existing PR
         if: ${{ steps.check-pr-exists.outputs.has-pr == 'true' }}
         run: |
-          git pull --ff-only origin update-seeds
+          # If we can't ff the branch, that's fine. We'll just redo it
+          git pull --ff-only origin update-seeds || true
       - name: Update the seeds, if needed
         id: update-seeds
         shell: bash
